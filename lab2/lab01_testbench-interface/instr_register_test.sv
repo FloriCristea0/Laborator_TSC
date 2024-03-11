@@ -19,6 +19,8 @@ module instr_register_test
   );
 
   timeunit 1ns/1ns;
+  parameter RD_NR = 19;
+  parameter WR_NR = 20;
 
   int seed = 555;
 
@@ -39,7 +41,8 @@ module instr_register_test
 
     $display("\nWriting values to register stack...");
     @(posedge clk) load_en = 1'b1;  // enable writing to register
-    repeat (3) begin
+    // repeat (3) begin - 11.03.2024 Cristea Florinela
+    repeat (WR_NR) begin
       @(posedge clk) randomize_transaction;
       @(negedge clk) print_transaction;
     end
@@ -47,12 +50,15 @@ module instr_register_test
 
     // read back and display same three register locations
     $display("\nReading back the same register locations written...");
-    for (int i=0; i<=2; i++) begin
+    // for (int i=0; i<=2; i++) begin - 11.03.2024 Cristea Florinela
+    for (int i=0; i<=RD_NR; i++) begin
       // later labs will replace this loop with iterating through a
       // scoreboard to determine which addresses were written and
       // the expected values to be read back
       @(posedge clk) read_pointer = i;
       @(negedge clk) print_results;
+      // punem check_result
+      check_result;
     end
 
     @(posedge clk) ;
@@ -72,9 +78,9 @@ module instr_register_test
     // addresses of 0, 1 and 2.  This will be replaceed with randomizeed
     // write_pointer values in a later lab
     //
-    static int temp = 0;
-    operand_a     <= $random(seed)%16;                 // between -15 and 15
-    operand_b     <= $unsigned($random)%16;            // between 0 and 15
+    static int temp = 0; // static e alocata o singura data (locatie de memorie)
+    operand_a     <= $random(seed)%16;                 // between -15 and 15 random genereaza pe 32 de biti
+    operand_b     <= $unsigned($random)%16;            // between 0 and 15 unsigned - converteste - in +
     opcode        <= opcode_t'($unsigned($random)%8);  // between 0 and 7, cast to opcode_t type
     write_pointer <= temp++;
   endfunction: randomize_transaction
@@ -91,6 +97,13 @@ module instr_register_test
     $display("  opcode = %0d (%s)", instruction_word.opc, instruction_word.opc.name);
     $display("  operand_a = %0d",   instruction_word.op_a);
     $display("  operand_b = %0d\n", instruction_word.op_b);
+    $display("  result = %0d\n", instruction_word.result);
   endfunction: print_results
 
+  function void check_result
+  // functie check result cu if-else in loc de case si la final un if care sa faca comparatia intre rezultatul calculat de noi si cel primit
+  endfunction check_result
+
 endmodule: instr_register_test
+
+  
