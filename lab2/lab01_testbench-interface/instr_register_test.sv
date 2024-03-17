@@ -4,9 +4,10 @@
  * with constrained random test generation, functional coverage, and
  * a scoreboard for self-verification.
  **********************************************************************/
-
 module instr_register_test
   import instr_register_pkg::*;  // user-defined types are defined in instr_register_pkg.sv
+
+
   (input  logic          clk,
    output logic          load_en,
    output logic          reset_n,
@@ -19,10 +20,12 @@ module instr_register_test
   );
 
   timeunit 1ns/1ns;
-  parameter RD_NR = 19;
+  parameter RD_NR = 20;
   parameter WR_NR = 20;
+  instruction_t iw_reg [0:31];
 
   int seed = 555;
+  
 
   initial begin
     $display("\n\n***********************************************************");
@@ -51,13 +54,14 @@ module instr_register_test
     // read back and display same three register locations
     $display("\nReading back the same register locations written...");
     // for (int i=0; i<=2; i++) begin - 11.03.2024 Cristea Florinela
-    for (int i=0; i<=RD_NR; i++) begin
+    for (int i=0; i<RD_NR; i++) begin
       // later labs will replace this loop with iterating through a
       // scoreboard to determine which addresses were written and
       // the expected values to be read back
       @(posedge clk) read_pointer = i;
       @(negedge clk) print_results;
-      // punem check_result
+      
+      iw_reg[read_pointer] = instruction_word;
       check_result;
     end
 
@@ -100,9 +104,45 @@ module instr_register_test
     $display("  result = %0d\n", instruction_word.result);
   endfunction: print_results
 
-  function void check_result
-  // functie check result cu if-else in loc de case si la final un if care sa faca comparatia intre rezultatul calculat de noi si cel primit
-  endfunction check_result
+ function void check_result;
+    custom_result_t result;
+
+    if (iw_reg[read_pointer].opc == ZERO)
+        result = {64{1'b0}};
+    else if (iw_reg[read_pointer].opc == PASSA)
+        result = iw_reg[read_pointer].op_a;
+    else if (iw_reg[read_pointer].opc == PASSB)
+        result = iw_reg[read_pointer].op_b;
+    else if (iw_reg[read_pointer].opc == ADD)
+        result = iw_reg[read_pointer].op_a + iw_reg[read_pointer].op_b;
+    else if (iw_reg[read_pointer].opc == SUB)
+        result = iw_reg[read_pointer].op_a - iw_reg[read_pointer].op_b;
+    else if (iw_reg[read_pointer].opc == MULT)
+        result = iw_reg[read_pointer].op_a * iw_reg[read_pointer].op_b;
+    else if (iw_reg[read_pointer].opc == DIV) begin
+        if (iw_reg[read_pointer].op_b === {32{1'b0}})
+            result = 'b0;
+        else
+            result = iw_reg[read_pointer].op_a / iw_reg[read_pointer].op_b;
+    end
+    else if (iw_reg[read_pointer].opc == MOD)
+        result = iw_reg[read_pointer].op_a % iw_reg[read_pointer].op_b;
+
+    $display("\nCheck Result:");
+    $display("  read_pointer = %0d", read_pointer);
+    $display("  opcode = %0d (%s)", iw_reg[read_pointer].opc, iw_reg[read_pointer].opc.name);
+    $display("  operand_a = %0d",   iw_reg[read_pointer].op_a);
+    $display("  operand_b = %0d", iw_reg[read_pointer].op_b);
+
+    $display("\nCalculated Test Result: %0d\n", result);
+
+    if (result === instruction_word.result) begin
+        $display("Results are matching!\n");
+    end
+    else begin
+        $display("Results are not matching!\n");
+    end
+endfunction: check_result
 
 endmodule: instr_register_test
 
