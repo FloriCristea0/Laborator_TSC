@@ -23,13 +23,14 @@ module instr_register_test
   parameter RD_NR = 20;
   parameter WR_NR = 20;
   instruction_t iw_reg [0:31];
+  instruction_t iw_reg_test [0:31]; 
 
   int seed = 555;
   
 
   initial begin
     $display("\n\n***********************************************************");
-    $display(    "***  THIS IS NOT A SELF-CHECKING TESTBENCH (YET).  YOU  ***");
+    $display(    "***  THIS IS A SELF-CHECKING TESTBENCH (YET).  YOU DON'T***");
     $display(    "***  NEED TO VISUALLY VERIFY THAT THE OUTPUT VALUES     ***");
     $display(    "***  MATCH THE INPUT VALUES FOR EACH REGISTER LOCATION  ***");
     $display(    "***********************************************************");
@@ -48,6 +49,7 @@ module instr_register_test
     repeat (WR_NR) begin
       @(posedge clk) randomize_transaction;
       @(negedge clk) print_transaction;
+      save_data;
     end
     @(posedge clk) load_en = 1'b0;  // turn-off writing to register
 
@@ -60,14 +62,13 @@ module instr_register_test
       // the expected values to be read back
       @(posedge clk) read_pointer = i;
       @(negedge clk) print_results;
-      
-      iw_reg[read_pointer] = instruction_word;
+      //iw_reg_test[read_pointer] = instruction_word;
       check_result;
     end
 
     @(posedge clk) ;
     $display("\n***********************************************************");
-    $display(  "***  THIS IS NOT A SELF-CHECKING TESTBENCH (YET).  YOU  ***");
+    $display(  "***  THIS IS A SELF-CHECKING TESTBENCH (YET).  YOU DON'T***");
     $display(  "***  NEED TO VISUALLY VERIFY THAT THE OUTPUT VALUES     ***");
     $display(  "***  MATCH THE INPUT VALUES FOR EACH REGISTER LOCATION  ***");
     $display(  "***********************************************************\n");
@@ -107,43 +108,63 @@ module instr_register_test
  function void check_result;
     custom_result_t result;
 
-    if (iw_reg[read_pointer].opc == ZERO)
+    if (iw_reg_test[read_pointer].opc == ZERO)
         result = {64{1'b0}};
-    else if (iw_reg[read_pointer].opc == PASSA)
-        result = iw_reg[read_pointer].op_a;
-    else if (iw_reg[read_pointer].opc == PASSB)
-        result = iw_reg[read_pointer].op_b;
-    else if (iw_reg[read_pointer].opc == ADD)
-        result = iw_reg[read_pointer].op_a + iw_reg[read_pointer].op_b;
-    else if (iw_reg[read_pointer].opc == SUB)
-        result = iw_reg[read_pointer].op_a - iw_reg[read_pointer].op_b;
-    else if (iw_reg[read_pointer].opc == MULT)
-        result = iw_reg[read_pointer].op_a * iw_reg[read_pointer].op_b;
-    else if (iw_reg[read_pointer].opc == DIV) begin
-        if (iw_reg[read_pointer].op_b === {32{1'b0}})
+    else if (iw_reg_test[read_pointer].opc == PASSA)
+        result = iw_reg_test[read_pointer].op_a;
+    else if (iw_reg_test[read_pointer].opc == PASSB)
+        result = iw_reg_test[read_pointer].op_b;
+    else if (iw_reg_test[read_pointer].opc == ADD)
+        result = iw_reg_test[read_pointer].op_a + iw_reg_test[read_pointer].op_b;
+    else if (iw_reg_test[read_pointer].opc == SUB)
+        result = iw_reg_test[read_pointer].op_a - iw_reg_test[read_pointer].op_b;
+    else if (iw_reg_test[read_pointer].opc == MULT)
+        result = iw_reg_test[read_pointer].op_a * iw_reg_test[read_pointer].op_b;
+    else if (iw_reg_test[read_pointer].opc == DIV) begin
+        if (iw_reg_test[read_pointer].op_b === {32{1'b0}})
             result = 'b0;
         else
-            result = iw_reg[read_pointer].op_a / iw_reg[read_pointer].op_b;
+            result = iw_reg_test[read_pointer].op_a / iw_reg_test[read_pointer].op_b;
     end
-    else if (iw_reg[read_pointer].opc == MOD)
-        result = iw_reg[read_pointer].op_a % iw_reg[read_pointer].op_b;
+    else if (iw_reg_test[read_pointer].opc == MOD) // tratat si cazul cu 0, la fel ca la div
+        result = iw_reg_test[read_pointer].op_a % iw_reg_test[read_pointer].op_b;
 
     $display("\nCheck Result:");
     $display("  read_pointer = %0d", read_pointer);
-    $display("  opcode = %0d (%s)", iw_reg[read_pointer].opc, iw_reg[read_pointer].opc.name);
-    $display("  operand_a = %0d",   iw_reg[read_pointer].op_a);
-    $display("  operand_b = %0d", iw_reg[read_pointer].op_b);
+    $display("  opcode = %0d (%s)", iw_reg_test[read_pointer].opc, iw_reg_test[read_pointer].opc.name);
+    $display("  operand_a = %0d",   iw_reg_test[read_pointer].op_a);
+    $display("  operand_b = %0d", iw_reg_test[read_pointer].op_b);
 
     $display("\nCalculated Test Result: %0d\n", result);
 
-    if (result === instruction_word.result) begin
+    if(iw_reg_test[read_pointer].opc === instruction_word.opc) 
+      $display("Opcode are matching!\n");
+    else
+      $display("Opcode are not matching!\n");
+
+    if(iw_reg_test[read_pointer].op_a === instruction_word.op_a) 
+        $display("Operand_a are matching!\n");
+    else
+      $display("Operand_a are not matching!\n");
+
+    if(iw_reg_test[read_pointer].op_b === instruction_word.op_b) 
+          $display("Operand_b are matching!\n");
+    else
+      $display("Operand_b are not matching!\n");
+   
+    if (result === instruction_word.result) 
         $display("Results are matching!\n");
-    end
-    else begin
+    else 
         $display("Results are not matching!\n");
-    end
+
+    if (iw_reg_test[read_pointer].opc === instruction_word.opc && iw_reg_test[read_pointer].op_a === instruction_word.op_a && iw_reg_test[read_pointer].op_b === instruction_word.op_b && result === instruction_word.result)
+      $display("TEST PASS\n");
+    else
+      $display("TEST FAIL\n");
 endfunction: check_result
 
-endmodule: instr_register_test
+function void save_data;
+  iw_reg_test[write_pointer] = {opcode, operand_a, operand_b, 'b0};
+endfunction: save_data
 
-  
+endmodule: instr_register_test
