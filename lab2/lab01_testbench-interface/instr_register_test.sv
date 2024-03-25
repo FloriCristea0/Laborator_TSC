@@ -20,13 +20,16 @@ module instr_register_test
   );
 
   timeunit 1ns/1ns;
-  parameter RD_NR = 20;
-  parameter WR_NR = 20;
+  parameter RD_NR = 7; // dupa 7, dupa 50, sa ne asiguram + de testat toate cele 9 cazuri intre write_pointer si read_pointer, la 50 sa ne asiguram ca merge overflow
+  parameter WR_NR = 7;
+  parameter WR_ORDER = 0; // 0 -> inc, 1 -> random, 2 -> dec
+  parameter RD_ORDER = 0;
   instruction_t iw_reg [0:31];
   instruction_t iw_reg_test [0:31]; 
 
   int seed = 555;
-  
+  int pass = 0;
+  int fail = 0;
 
   initial begin
     $display("\n\n***********************************************************");
@@ -60,11 +63,18 @@ module instr_register_test
       // later labs will replace this loop with iterating through a
       // scoreboard to determine which addresses were written and
       // the expected values to be read back
-      @(posedge clk) read_pointer = i;
+      //@(posedge clk) read_pointer = i;
+      @(posedge clk) case (RD_ORDER)
+        0: read_pointer = i;
+        1: read_pointer = ($unsigned($random)%32);
+        2: read_pointer = 31 - (i % 32);
+     endcase 
       @(negedge clk) print_results;
       //iw_reg_test[read_pointer] = instruction_word;
       check_result;
     end
+
+    final_report;
 
     @(posedge clk) ;
     $display("\n***********************************************************");
@@ -84,10 +94,16 @@ module instr_register_test
     // write_pointer values in a later lab
     //
     static int temp = 0; // static e alocata o singura data (locatie de memorie)
+    static int temp2 = 31;
     operand_a     <= $random(seed)%16;                 // between -15 and 15 random genereaza pe 32 de biti
     operand_b     <= $unsigned($random)%16;            // between 0 and 15 unsigned - converteste - in +
     opcode        <= opcode_t'($unsigned($random)%8);  // between 0 and 7, cast to opcode_t type
-    write_pointer <= temp++;
+    // write_pointer <= temp++;
+    case (WR_ORDER)
+      0: write_pointer <= temp++;
+      1: write_pointer <= ($unsigned($random)%32);
+      2: write_pointer <= temp2--;
+    endcase
   endfunction: randomize_transaction
 
   function void print_transaction;
@@ -157,14 +173,25 @@ module instr_register_test
     else 
         $display("Results are not matching!\n");
 
-    if (iw_reg_test[read_pointer].opc === instruction_word.opc && iw_reg_test[read_pointer].op_a === instruction_word.op_a && iw_reg_test[read_pointer].op_b === instruction_word.op_b && result === instruction_word.result)
+    if (iw_reg_test[read_pointer].opc === instruction_word.opc && iw_reg_test[read_pointer].op_a === instruction_word.op_a && iw_reg_test[read_pointer].op_b === instruction_word.op_b && result === instruction_word.result) begin
       $display("TEST PASS\n");
-    else
+      pass = pass + 1; 
+    end
+    else begin
       $display("TEST FAIL\n");
+      fail = fail + 1; 
+    end
 endfunction: check_result
 
 function void save_data;
   iw_reg_test[write_pointer] = {opcode, operand_a, operand_b, 'b0};
 endfunction: save_data
+
+// functie de final report cu 2 countere fail, pass si sa vedem cate trec si cate nu
+function void final_report;
+  $display("  wr_nr = %0d", WR_NR);
+  $display("  fail = %0d", fail);
+  $display("  pass = %0d", pass);
+endfunction: final_report
 
 endmodule: instr_register_test
