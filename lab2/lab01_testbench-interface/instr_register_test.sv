@@ -20,8 +20,8 @@ module instr_register_test
   );
 
   timeunit 1ns/1ns;
-  parameter RD_NR = 7; // dupa 7, dupa 50, sa ne asiguram + de testat toate cele 9 cazuri intre write_pointer si read_pointer, la 50 sa ne asiguram ca merge overflow
-  parameter WR_NR = 7;
+  parameter RD_NR = 50; // dupa 7, dupa 50, sa ne asiguram + de testat toate cele 9 cazuri intre write_pointer si read_pointer, la 50 sa ne asiguram ca merge overflow
+  parameter WR_NR = 50;
   parameter WR_ORDER = 0; // 0 -> inc, 1 -> random, 2 -> dec
   parameter RD_ORDER = 0;
   instruction_t iw_reg [0:31];
@@ -187,11 +187,23 @@ function void save_data;
   iw_reg_test[write_pointer] = {opcode, operand_a, operand_b, 'b0};
 endfunction: save_data
 
-// functie de final report cu 2 countere fail, pass si sa vedem cate trec si cate nu
+
 function void final_report;
-  $display("  wr_nr = %0d", WR_NR);
-  $display("  fail = %0d", fail);
-  $display("  pass = %0d", pass);
+    real pass_percentage;
+    real fail_percentage;
+  
+    pass_percentage = (pass * 100.0) / WR_NR;
+    fail_percentage = (fail * 100.0) / WR_NR;
+  
+    $display("Total number of tests: %0d", WR_NR);
+  
+    $display("Number of failed tests: %0d", fail);
+  
+    $display("Number of passed tests: %0d", pass);
+
+    $display("Pass percentage: %0.2f%%", pass_percentage);
+  
+    $display("Fail percentage: %0.2f%%", fail_percentage);
 endfunction: final_report
 
 endmodule: instr_register_test
