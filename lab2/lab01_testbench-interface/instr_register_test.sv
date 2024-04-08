@@ -24,6 +24,7 @@ module instr_register_test
   parameter WR_NR = 50;
   parameter WR_ORDER = 0; // 0 -> inc, 1 -> random, 2 -> dec
   parameter RD_ORDER = 0;
+  parameter TEST_NAME;
   instruction_t iw_reg [0:31];
   instruction_t iw_reg_test [0:31]; 
 
@@ -204,6 +205,9 @@ function void final_report;
     $display("Pass percentage: %0.2f%%", pass_percentage);
   
     $display("Fail percentage: %0.2f%%", fail_percentage);
+    // aici un fopen("..reports/regresion...")
+    // $display("Denumirea testului luata din %")
+    // ori facem aici, ori facem o alta functie
 endfunction: final_report
 
 endmodule: instr_register_test
