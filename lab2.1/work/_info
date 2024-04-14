@@ -1,0 +1,109 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/User/Documents/Facultate/An4/TSC/lab2
+vinstr_register
+Z1 DXx6 sv_std 3 std 0 22 AD7iAPLo6nTIKk<N0eo=D3
+Z2 DXx4 work 18 instr_register_pkg 0 22 a45ckn7T[P^HOQi58Qdj93
+!s110 1711895260
+!i10b 1
+!s100 LV3PUaaU=M<6PJN`RhDI63
+Ihod2OMNAgfWP;Ao2zmnBV1
+Z3 VDg1SIo80bB@j0V0VzS_@n1
+!s105 instr_register_sv_unit
+S1
+R0
+w1710747628
+8C:/Users/User/Documents/Facultate/An4/TSC/lab2/lab_dut/instr_register.sv
+FC:/Users/User/Documents/Facultate/An4/TSC/lab2/lab_dut/instr_register.sv
+L0 9
+Z4 OV;L;10.5b;63
+r1
+!s85 0
+31
+!s108 1711895260.000000
+!s107 C:/Users/User/Documents/Facultate/An4/TSC/lab2/lab_dut/instr_register.sv|
+!s90 -reportprogress|300|-work|work|C:/Users/User/Documents/Facultate/An4/TSC/lab2/lab_dut/instr_register.sv|
+!i113 1
+Z5 o-work work
+Z6 tCvgOpt 0
+Xinstr_register_pkg
+R1
+!s110 1711895258
+!i10b 1
+!s100 ;z[E@XlaUDDkXJgOkef:X1
+Ia45ckn7T[P^HOQi58Qdj93
+Va45ckn7T[P^HOQi58Qdj93
+S1
+R0
+w1710162537
+8C:/Users/User/Documents/Facultate/An4/TSC/lab2/lab_dut/instr_register_pkg.sv
+FC:/Users/User/Documents/Facultate/An4/TSC/lab2/lab_dut/instr_register_pkg.sv
+L0 5
+R4
+r1
+!s85 0
+31
+!s108 1711895258.000000
+!s107 C:/Users/User/Documents/Facultate/An4/TSC/lab2/lab_dut/instr_register_pkg.sv|
+!s90 -reportprogress|300|-work|work|C:/Users/User/Documents/Facultate/An4/TSC/lab2/lab_dut/instr_register_pkg.sv|
+!i113 1
+R5
+R6
+vinstr_register_test
+R1
+R2
+!s110 1713093838
+!i10b 1
+!s100 ;O4]b]1o_082jRdH79hZM2
+ILHM2^L>n@7LJeHE]P3n:;0
+R3
+!s105 instr_register_test_sv_unit
+S1
+R0
+w1711896275
+8C:/Users/User/Documents/Facultate/An4/TSC/lab2/lab01_testbench-interface/instr_register_test.sv
+FC:/Users/User/Documents/Facultate/An4/TSC/lab2/lab01_testbench-interface/instr_register_test.sv
+L0 7
+OW;L;10.5c;63
+r1
+!s85 0
+31
+!s108 1713093838.000000
+!s107 C:/Users/User/Documents/Facultate/An4/TSC/lab2/lab01_testbench-interface/instr_register_test.sv|
+!s90 -reportprogress|300|-work|work|C:/Users/User/Documents/Facultate/An4/TSC/lab2/lab01_testbench-interface/instr_register_test.sv|
+!s101 -O0
+!i113 1
+o-work work -O0
+R6
+vtop
+R1
+R2
+!s110 1711895265
+!i10b 1
+!s100 Pg=M]M2k<1Dk;?TFRVBCm1
+Ihn?62QW[S9CKg2Q0^G9V:0
+R3
+!s105 top_sv_unit
+S1
+R0
+w1710161183
+8C:/Users/User/Documents/Facultate/An4/TSC/lab2/lab01_testbench-interface/top.sv
+FC:/Users/User/Documents/Facultate/An4/TSC/lab2/lab01_testbench-interface/top.sv
+L0 5
+R4
+r1
+!s85 0
+31
+!s108 1711895265.000000
+!s107 C:/Users/User/Documents/Facultate/An4/TSC/lab2/lab01_testbench-interface/top.sv|
+!s90 -reportprogress|300|-work|work|C:/Users/User/Documents/Facultate/An4/TSC/lab2/lab01_testbench-interface/top.sv|
+!i113 1
+R5
+R6
