@@ -24,7 +24,7 @@ module instr_register_test
   parameter WR_NR = 3;
   parameter WR_ORDER = 0; // 0 -> inc, 1 -> random, 2 -> dec
   parameter RD_ORDER = 0;
-  parameter TEST = "test";
+  parameter TEST;
   instruction_t iw_reg [0:31];
   instruction_t iw_reg_test [0:31]; 
 
@@ -215,10 +215,10 @@ function void write_file;
 
   fd = $fopen("../reports/regression_transcript/regression_status.txt", "a");
   if (pass == WR_NR) begin
-    $fdisplay(fd, "%s : passed", TEST_NAME);
+    $fdisplay(fd, "%s : passed", TEST);
   end
   else begin
-    $fdisplay(fd, "%s : failed", TEST_NAME);
+    $fdisplay(fd, "%s : failed", TEST);
   end
 
   $fclose(fd);

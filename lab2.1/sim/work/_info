@@ -11,7 +11,7 @@ Z0 dC:/Users/User/Documents/Facultate/An4/TSC/Laborator_TSC/lab2.1/sim
 vinstr_register
 Z1 DXx6 sv_std 3 std 0 22 AD7iAPLo6nTIKk<N0eo=D3
 Z2 DXx4 work 18 instr_register_pkg 0 22 1]G:H=V][biLlg:jiR1700
-Z3 !s110 1713094657
+Z3 !s110 1713118243
 !i10b 1
 !s100 3:_KJi_J207NoG9GEEPW<1
 IfgIe4DPS7hN0cZVdez`>U0
@@ -27,7 +27,7 @@ Z5 OW;L;10.5c;63
 r1
 !s85 0
 31
-Z6 !s108 1713094657.000000
+Z6 !s108 1713118243.000000
 Z7 !s107 ../lab01_testbench-interface/top.sv|../lab01_testbench-interface/instr_register_test.sv|../lab_dut/instr_register.sv|../lab_dut/instr_register_pkg.sv|
 Z8 !s90 -sv|-timescale|1ps/1ps|-work|work|-f|sources.txt|
 !s101 -O0
@@ -65,13 +65,13 @@ R1
 R2
 R3
 !i10b 1
-!s100 h=42N5=V9_VQe9ceQ:DiE2
-Ik@?;R[:Ga`zEX^62d60Fb2
+!s100 W<X6z`B_cNR97b2QF]@1n1
+IdDMAEe[>]GJNPcGD=baeJ3
 R4
 !s105 instr_register_test_sv_unit
 S1
 R0
-w1713094405
+w1713118188
 8../lab01_testbench-interface/instr_register_test.sv
 F../lab01_testbench-interface/instr_register_test.sv
 L0 7

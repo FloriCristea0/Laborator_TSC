@@ -1,0 +1,9 @@
+RAND_RAND : failed
+DEC_DEC : passed
+INC_INC : passed
+INC_RAND : failed
+INC_DEC : passed
+RAND_DEC : failed
+DEC_RAND : failed
+DEC_INC : passed
+RAND_INC : failed
