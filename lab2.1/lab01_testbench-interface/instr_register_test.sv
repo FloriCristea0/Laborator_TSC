@@ -25,10 +25,12 @@ module instr_register_test
   parameter WR_ORDER = 0; // 0 -> inc, 1 -> random, 2 -> dec
   parameter RD_ORDER = 0;
   parameter TEST;
+  parameter SEED_VAL = 555;
   instruction_t iw_reg [0:31];
   instruction_t iw_reg_test [0:31]; 
 
-  int seed = 555;
+  // int seed = 555;
+  int seed = SEED_VAL; 
   int pass = 0;
   int fail = 0;
 
@@ -72,6 +74,7 @@ module instr_register_test
      endcase 
       @(negedge clk) print_results;
       //iw_reg_test[read_pointer] = instruction_word;
+      //iw_reg[i] = '{opc:ZERO,default:0}; 
       check_result;
     end
 
